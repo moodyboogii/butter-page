@@ -45,8 +45,9 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 144px;
-      height: 144px;
+      width: 25%;
+      max-width: 180px;
+      height: auto;
       transform: translate(-50%, -50%);
       z-index: 10;
     }
@@ -84,70 +85,6 @@
       line-height: 1.6;
       text-align: center;
       margin-bottom: 5px;
-    }
-
-    .input-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .input-box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .input-box input {
-      width: 70vw;
-      max-width: 280px;
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .input-box button {
-      padding: 8px 16px;
-      font-size: 14px;
-      background-color: #ffcc70;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .button-group button {
-      padding: 10px 16px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #ffcc70;
-      transition: background-color 0.3s;
-      flex: 1 1 auto;
-      min-width: 140px;
-      font-weight: 600;
-    }
-
-    .button-group button:hover {
-      background-color: #ffb347;
     }
   </style>
 </head>
