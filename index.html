@@ -41,43 +41,39 @@
       cursor: pointer;
     }
 
-    .butter {
+    .butter-image-wrap {
       position: absolute;
       top: 50%;
       left: 50%;
+      width: 144px;
+      height: 144px;
       transform: translate(-50%, -50%);
-      background-color: #ffdc7a;
-      width: 36vw;
-      max-width: 144px;
-      height: 36vw;
-      max-height: 144px;
+      z-index: 10;
+    }
+
+    .butter-image {
+      width: 100%;
+      height: 100%;
+    }
+
+    .butter-text-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
       text-align: center;
-      font-weight: 500;
-      font-size: 0.9rem;
-      border-radius: 8px;
-      box-shadow: none;
-      padding: 8px 6px;
-      z-index: 10;
+      padding: 6px;
     }
 
     .date-stamp {
       font-size: 0.7rem;
       margin: 4px 4px 2px 4px;
       color: #8B5E3C;
-    }
-
-    #butter-text {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6px;
-      margin-bottom: 5px;
     }
 
     #butter-text span {
@@ -87,6 +83,7 @@
       overflow: hidden;
       line-height: 1.6;
       text-align: center;
+      margin-bottom: 5px;
     }
 
     .input-overlay {
@@ -161,15 +158,18 @@
   </p>
 
   <div class="image-container" id="initial-image" onclick="pickButter()">
-    <img src="https://i.ibb.co/39ZQFKpx/toast3.png" alt="기본 토스트 이미지" crossorigin="anonymous" />
+    <img src="https://raw.githubusercontent.com/moodyboogii/butter-page/main/images/toast3_optimized.png" alt="기본 토스트 이미지" loading="lazy" />
   </div>
 
   <div class="image-container" id="result-area" style="display: none;">
-    <img src="https://i.ibb.co/B2cf7GRb/toast1.png" alt="토스트 결과 이미지" id="toast-image" crossorigin="anonymous" />
-    <div class="butter" id="butter-box" style="display: none;">
-      <div class="date-stamp" id="date-stamp"></div>
-      <div id="butter-text">
-        <span></span>
+    <img src="https://raw.githubusercontent.com/moodyboogii/butter-page/main/images/toast1_optimized.png" alt="토스트 결과 이미지" id="toast-image" loading="lazy" />
+    <div class="butter-image-wrap" id="butter-box" style="display: none;">
+      <img src="images/butter_optimized.png" class="butter-image" alt="버터 이미지" />
+      <div class="butter-text-overlay">
+        <div class="date-stamp" id="date-stamp"></div>
+        <div id="butter-text">
+          <span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -221,7 +221,7 @@
       document.getElementById("action-buttons").style.display = "flex";
       document.getElementById("date-stamp").textContent = getFormattedDate();
       document.querySelector("#butter-text span").textContent = message;
-      document.getElementById("butter-box").style.display = "flex";
+      document.getElementById("butter-box").style.display = "block";
     }
 
     function pickButter() {
