@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 버터 뽑기</title>
+  <link href="https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSans.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'GmarketSans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #fffbe9;
+      padding: 16px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .image-container {
+      position: relative;
+      text-align: center;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      cursor: pointer;
+    }
+
+    .butter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffdc7a;
+      width: 36vw;
+      max-width: 144px;
+      height: 36vw;
+      max-height: 144px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      box-shadow: none;
+      padding: 8px 6px;
+      z-index: 10;
+    }
+
+    .date-stamp {
+      font-size: 0.7rem;
+      margin: 4px 4px 2px 4px;
+      color: #8B5E3C;
+    }
+
+    #butter-text {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6px;
+      margin-bottom: 5px;
+    }
+
+    #butter-text span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      overflow: hidden;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .input-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .input-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .input-box input {
+      width: 70vw;
+      max-width: 280px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .input-box button {
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #ffcc70;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .button-group button {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #ffcc70;
+      transition: background-color 0.3s;
+      flex: 1 1 auto;
+      min-width: 140px;
+      font-weight: 600;
+    }
+
+    .button-group button:hover {
+      background-color: #ffb347;
+    }
+  </style>
+</head>
+<body>
+  <h1>오늘의 버터 뽑기🥞</h1>
+  <p style="text-align: center;">
+    일상을 풍미있게 만들어 줄<br>버터 한 조각을 뽑아보세요.
+  </p>
+
+  <div class="image-container" id="initial-image" onclick="pickButter()">
+    <img src="https://i.ibb.co/39ZQFKpx/toast3.png" alt="기본 토스트 이미지" crossorigin="anonymous" />
+  </div>
+
+  <div class="image-container" id="result-area" style="display: none;">
+    <img src="https://i.ibb.co/B2cf7GRb/toast1.png" alt="토스트 결과 이미지" id="toast-image" crossorigin="anonymous" />
+    <div class="butter" id="butter-box" style="display: none;">
+      <div class="date-stamp" id="date-stamp"></div>
+      <div id="butter-text">
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-group" id="main-buttons">
+    <button onclick="pickButter()">랜덤 버터 뽑기</button>
+    <button onclick="openInputBox()">직접 버터 쓰기</button>
+  </div>
+
+  <div class="button-group" id="action-buttons" style="display: none;">
+    <button onclick="downloadResult()">이미지 저장하기</button>
+    <button onclick="resetPage()">처음으로 돌아가기</button>
+    <button onclick="copyLink()">공유하기</button>
+  </div>
+
+  <div class="input-overlay" id="input-overlay">
+    <div class="input-box">
+      <input type="text" id="user-input" placeholder="기분 좋은 행동을 적어주세요 :)" />
+      <button onclick="submitInput()">확인</button>
+    </div>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js" defer></script>
+  <script>
+    const messages = [
+      "따뜻한 말 한마디 건네기",
+      "스스로 칭찬 3개 적기",
+      "햇빛 10분 쬐기",
+      "물 한잔 마시기",
+      "좋아하는 노래 듣기",
+      "산책 5분 하기",
+      "깊은 숨 3번 쉬기",
+      "하늘 한 번 보기"
+    ];
+
+    function getFormattedDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const date = String(now.getDate()).padStart(2, '0');
+      const weekday = ['일', '월', '화', '수', '목', '금', '토'][now.getDay()];
+      return `${year.toString().split('').join(' ')} - ${month.split('').join(' ')} - ${date.split('').join(' ')} (${weekday})`;
+    }
+
+    function showResult(message) {
+      document.getElementById("initial-image").style.display = "none";
+      document.getElementById("result-area").style.display = "block";
+      document.getElementById("main-buttons").style.display = "none";
+      document.getElementById("action-buttons").style.display = "flex";
+      document.getElementById("date-stamp").textContent = getFormattedDate();
+      document.querySelector("#butter-text span").textContent = message;
+      document.getElementById("butter-box").style.display = "flex";
+    }
+
+    function pickButter() {
+      const random = messages[Math.floor(Math.random() * messages.length)];
+      showResult(random);
+    }
+
+    function openInputBox() {
+      document.getElementById("input-overlay").style.display = "flex";
+    }
+
+    function submitInput() {
+      const input = document.getElementById("user-input").value;
+      if (input.trim()) {
+        document.getElementById("input-overlay").style.display = "none";
+        showResult(input.trim());
+        document.getElementById("user-input").value = "";
+      }
+    }
+
+    function downloadResult() {
+      const toastArea = document.getElementById("result-area");
+      html2canvas(toastArea, {
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null
+      }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "오늘의_버터.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }).catch(err => {
+        alert("이미지 저장 중 오류가 발생했습니다. 브라우저 설정 또는 이미지 출처를 확인해주세요.");
+        console.error(err);
+      });
+    }
+
+    function resetPage() {
+      location.reload();
+    }
+
+    function copyLink() {
+      const message = `오늘의 버터를 뽑아보세요! 🧈\n${window.location.href}`;
+      navigator.clipboard.writeText(message).then(() => {
+        alert("링크가 복사되었습니다! 🎉");
+      }).catch(err => {
+        alert("복사에 실패했습니다. 다시 시도해주세요.");
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
